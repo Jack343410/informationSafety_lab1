@@ -1,0 +1,21 @@
+﻿===== [01] GET /health =====
+status = ok
+===== [02] GET /api/data without token  (expect 401) =====
+status = 401
+===== [03] POST /auth/login with SQLi payload  (expect 401) =====
+payload = {"username":"alice' OR '1'='1","password":"x"}
+status = 401
+===== [04] POST /auth/login with valid credentials  (expect 200 + JWT) =====
+token      = eyJhbGciOiJIUzI1NiIsInR5cCI6Ik...
+token_type = Bearer
+expires_in = 1800 seconds
+===== [05] GET /api/data with Bearer token  (expect 200 + users) =====
+id=1  username=alice  role=user
+id=2  username=bob  role=user
+===== [06] POST /api/posts with script payload  (expect escaped output) =====
+payload = {"title":"<script>alert(1)</script>","body":"xss test"}
+returned title = &lt;script&gt;alert(1)&lt;/script&gt;
+RESULT: escaped -> OK
+===== [07] password storage in SQLite  (expect bcrypt hash, no plaintext) =====
+alice -> $2b$12$MSUcCu8ConCsyzsCngOY8u...
+bob -> $2b$12$dlCShrd0z.nW4zeO6RTa3....
