@@ -8,8 +8,7 @@ import tempfile
 # Important: the environment must be configured BEFORE `import app`,
 # because app.py reads these values at import time.
 os.environ["APP_DB"] = os.path.join(tempfile.mkdtemp(), "test.db")
-os.environ["JWT_SECRET"] = "test-secret"
-
+os.environ["JWT_SECRET"] = "test-only-secret-key-with-at-least-32-bytes"
 import app as appmod  # noqa: E402
 
 appmod.init_db()
